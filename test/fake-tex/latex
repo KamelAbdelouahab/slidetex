@@ -1,0 +1,15 @@
+#!/bin/sh
+# Fake "latex" mimicking MiKTeX's first run: detects overlapping runs and fails the very first call.
+STATE="${SLIDETEX_FAKE_STATE:?}"
+case "$1" in --version) echo "pdfTeX fake (MiKTeX mock)"; exit 0;; esac
+if ! mkdir "$STATE/lock" 2>/dev/null; then echo overlap >> "$STATE/overlaps"; fi
+echo run >> "$STATE/runs"
+if [ ! -f "$STATE/fmt-built" ]; then
+  touch "$STATE/fmt-built"; sleep 0.3; rmdir "$STATE/lock" 2>/dev/null
+  echo "Sorry, but latex did not succeed. The log file hopefully contains the information to get MiKTeX going again"
+  exit 1
+fi
+sleep 0.2
+/usr/bin/latex "$@" >/dev/null 2>&1; rc=$?
+rmdir "$STATE/lock" 2>/dev/null
+exit $rc

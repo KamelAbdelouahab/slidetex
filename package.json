@@ -1,0 +1,41 @@
+{
+  "name": "slidetex",
+  "version": "1.1.1",
+  "description": "Editable LaTeX equations for PowerPoint 2016+ / Microsoft 365 / Web (Office.js add-in)",
+  "main": "server.js",
+  "scripts": {
+    "certs": "office-addin-dev-certs install --days 365",
+    "serve": "node server.js",
+    "start": "office-addin-debugging start manifest.xml desktop --app powerpoint --dev-server \"node server.js\" --dev-server-port 3000 --no-debug",
+    "start:web": "node server.js",
+    "stop": "office-addin-debugging stop manifest.xml",
+    "manifest": "node scripts/make-manifest.js",
+    "validate": "office-addin-manifest validate manifest.xml",
+    "build:static": "node scripts/build-legacy.js && node scripts/build-static.js",
+    "test": "node test/api-check.js && node test/latex-queue-test.js && node test/run-tests.js",
+    "build:legacy": "node scripts/build-legacy.js",
+    "build:exe": "node scripts/build-exe.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "@resvg/resvg-wasm": "^2.6.2",
+    "express": "^4.22.3",
+    "mathjax": "^3.2.2",
+    "node-forge": "^1.4.3",
+    "office-addin-debugging": "^7.0.1",
+    "office-addin-dev-certs": "^3.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^8.1.2",
+    "@babel/preset-env": "^8.0.7",
+    "@types/office-js": "^1.0.617",
+    "abortcontroller-polyfill": "^1.7.8",
+    "core-js-bundle": "^3.51.0",
+    "fast-text-encoding": "^1.0.6",
+    "promise-polyfill": "^8.3.0",
+    "regenerator-runtime": "^0.14.1",
+    "whatwg-fetch": "^3.6.20"
+  },
+  "private": true
+}

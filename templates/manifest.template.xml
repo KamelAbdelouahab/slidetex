@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
+           xsi:type="TaskPaneApp">
+  <Id>6f3c2a1e-9b4d-4c7e-8a51-2d7e0b9f4c13</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>SlideTeX</ProviderName>
+  <DefaultLocale>fr-FR</DefaultLocale>
+  <DisplayName DefaultValue="SlideTeX" />
+  <Description DefaultValue="Équations LaTeX vectorielles et éditables dans PowerPoint (MathJax intégré ou LaTeX local)." >
+    <Override Locale="en-US" Value="Editable vector LaTeX equations in PowerPoint (built-in MathJax or local LaTeX)." />
+  </Description>
+  <IconUrl DefaultValue="{{BASE}}/assets/icon-32.png" />
+  <HighResolutionIconUrl DefaultValue="{{BASE}}/assets/icon-64.png" />
+  <SupportUrl DefaultValue="{{BASE}}/help.html" />
+  <AppDomains>
+    <AppDomain>{{ORIGIN}}</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Presentation" />
+  </Hosts>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="{{BASE}}/taskpane.html" />
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Hosts>
+      <Host xsi:type="Presentation">
+        <DesktopFormFactor>
+          <GetStarted>
+            <Title resid="GetStarted.Title" />
+            <Description resid="GetStarted.Description" />
+            <LearnMoreUrl resid="Help.Url" />
+          </GetStarted>
+          <FunctionFile resid="Commands.Url" />
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <OfficeTab id="TabHome">
+              <Group id="SlideTeX.Group">
+                <Label resid="Group.Label" />
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16" />
+                  <bt:Image size="32" resid="Icon.32" />
+                  <bt:Image size="80" resid="Icon.80" />
+                </Icon>
+                <Control xsi:type="Button" id="SlideTeX.Open">
+                  <Label resid="Open.Label" />
+                  <Supertip>
+                    <Title resid="Open.Label" />
+                    <Description resid="Open.Tooltip" />
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16" />
+                    <bt:Image size="32" resid="Icon.32" />
+                    <bt:Image size="80" resid="Icon.80" />
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>SlideTeXPane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url" />
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16" DefaultValue="{{BASE}}/assets/icon-16.png" />
+        <bt:Image id="Icon.32" DefaultValue="{{BASE}}/assets/icon-32.png" />
+        <bt:Image id="Icon.80" DefaultValue="{{BASE}}/assets/icon-80.png" />
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="Commands.Url" DefaultValue="{{BASE}}/commands.html" />
+        <bt:Url id="Taskpane.Url" DefaultValue="{{BASE}}/taskpane.html" />
+        <bt:Url id="Help.Url" DefaultValue="{{BASE}}/help.html" />
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="GetStarted.Title" DefaultValue="SlideTeX est prêt" />
+        <bt:String id="Group.Label" DefaultValue="LaTeX" />
+        <bt:String id="Open.Label" DefaultValue="Équation LaTeX" />
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="GetStarted.Description" DefaultValue="Accueil › Équation LaTeX : tapez votre formule, insérez-la, sélectionnez-la plus tard pour la modifier." />
+        <bt:String id="Open.Tooltip" DefaultValue="Insérer ou modifier une équation LaTeX (vectorielle, éditable)." />
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>

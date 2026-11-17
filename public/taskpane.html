@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SlideTeX</title>
+  <link rel="stylesheet" href="taskpane.css" />
+  <!-- Office.js must come from Microsoft's CDN. -->
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <script>
+    window.MathJax = {
+      loader: { load: [] },
+      tex: {
+        packages: { "[+]": [] },
+        inlineMath: [["$", "$"], ["\\(", "\\)"]],
+        processEscapes: true,
+      },
+      svg: { fontCache: "none" }, // self-contained <path>s: PowerPoint-friendly
+      startup: { typeset: false },
+    };
+  </script>
+  <!-- PowerPoint 2016/2019 perpetual on Windows run add-ins in IE11: ES5 build + polyfills. -->
+  <script nomodule src="legacy/polyfills.js"></script>
+  <script src="vendor/mathjax/tex-svg-full.js" defer></script>
+  <!-- Modern webviews (Microsoft 365, 2021+, Mac, Web) -->
+  <script type="module" src="snippets.js"></script>
+  <script type="module" src="svgtools.js"></script>
+  <script type="module" src="taskpane.js"></script>
+  <script nomodule src="legacy/app.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <img src="assets/icon-32.png" width="20" height="20" alt="" />
+      <span>SlideTeX</span>
+    </div>
+    <div class="env" id="envBadge" title="">…</div>
+  </header>
+
+  <div id="editBanner" class="banner" hidden>
+    <span id="editBannerText">Équation SlideTeX sélectionnée.</span>
+    <button id="btnLoadSel" class="link">Charger</button>
+  </div>
+
+  <main>
+    <section class="editor-wrap">
+      <div class="toolbar" id="snippetTabs" role="tablist"></div>
+      <div class="palette" id="palette"></div>
+      <textarea id="src" spellcheck="false" autocomplete="off" autocapitalize="off"
+        placeholder="Tapez votre LaTeX ici, ex. : \int_0^\infty e^{-x^2}\,dx = \frac{\sqrt{\pi}}{2}"></textarea>
+      <div class="hint">Ctrl+Entrée pour insérer / mettre à jour</div>
+    </section>
+
+    <section class="preview-wrap">
+      <div class="preview" id="preview" aria-live="polite"><span class="muted">Aperçu</span></div>
+      <div class="preview-meta">
+        <span id="dims"></span>
+        <span id="renderTime"></span>
+      </div>
+      <div class="error" id="error" hidden></div>
+    </section>
+
+    <section class="actions">
+      <button id="btnPrimary" class="primary">Insérer</button>
+      <button id="btnInsertNew" class="secondary" hidden>Insérer comme nouvelle</button>
+    </section>
+
+    <section class="options">
+      <div class="row">
+        <label for="mode">Mode</label>
+        <select id="mode">
+          <option value="display">Équation (display)</option>
+          <option value="inline">En ligne (inline)</option>
+          <option value="text">Texte LaTeX / TikZ</option>
+        </select>
+      </div>
+      <div class="row">
+        <label for="engine">Moteur</label>
+        <select id="engine">
+          <option value="mathjax">MathJax intégré (sans installation)</option>
+          <option value="latex">LaTeX local (TeX Live / MiKTeX)</option>
+        </select>
+      </div>
+      <div class="row two">
+        <div>
+          <label for="size">Taille (pt)</label>
+          <input id="size" type="number" min="4" max="400" step="1" value="28" />
+        </div>
+        <div>
+          <label for="color">Couleur</label>
+          <div class="color-row">
+            <input id="color" type="color" value="#000000" />
+            <input id="colorHex" type="text" maxlength="7" value="#000000" />
+          </div>
+        </div>
+      </div>
+      <div class="row two">
+        <div>
+          <label for="format">Format</label>
+          <select id="format">
+            <option value="svg">SVG (vectoriel)</option>
+            <option value="png">PNG (bitmap)</option>
+          </select>
+        </div>
+        <div>
+          <label for="dpi">Résolution PNG</label>
+          <select id="dpi">
+            <option value="150">150 dpi</option>
+            <option value="300">300 dpi</option>
+            <option value="600">600 dpi</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <details class="block" id="preambleBlock">
+      <summary>Préambule &amp; macros</summary>
+      <p class="muted small">Ajouté avant chaque formule. Avec MathJax, seules les lignes
+        <code>\newcommand</code>, <code>\renewcommand</code>, <code>\def</code> et <code>\DeclareMathOperator</code>
+        sont utilisées ; avec LaTeX local, tout le préambule (<code>\usepackage{tikz}</code>…) est compilé.</p>
+      <textarea id="preamble" spellcheck="false" rows="5"
+        placeholder="\newcommand{\R}{\mathbb{R}}&#10;\usepackage{tikz}"></textarea>
+    </details>
+
+    <details class="block" id="examplesBlock">
+      <summary>Exemples</summary>
+      <div class="examples" id="examples"></div>
+    </details>
+
+    <details class="block" id="historyBlock">
+      <summary>Historique</summary>
+      <div class="history" id="history"><span class="muted small">Vide.</span></div>
+    </details>
+
+    <details class="block" id="toolsBlock">
+      <summary>Outils</summary>
+      <div class="tools">
+        <button id="btnRegenAll" class="secondary">Régénérer toutes les équations de la présentation</button>
+        <label class="check"><input type="checkbox" id="regenApplyStyle" /> appliquer la taille et la couleur actuelles</label>
+        <div class="row">
+          <label for="serverUrl">Serveur LaTeX local</label>
+          <input id="serverUrl" type="text" placeholder="https://localhost:3000" />
+        </div>
+        <div class="row inline-buttons">
+          <button id="btnCheckServer" class="secondary small">Tester le serveur</button>
+          <button id="btnDownloadSvg" class="secondary small">Télécharger SVG</button>
+          <button id="btnDownloadPng" class="secondary small">Télécharger PNG</button>
+        </div>
+        <div class="muted small" id="capsInfo"></div>
+      </div>
+    </details>
+  </main>
+
+  <footer class="status" id="status" role="status"></footer>
+</body>
+</html>

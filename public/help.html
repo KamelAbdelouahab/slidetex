@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Aide SlideTeX</title>
+<style>
+  :root { --bg:#fff; --fg:#1f2328; --muted:#616975; --code:#f1f3f5; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#1f1f1f; --fg:#e8e8e8; --muted:#a5a5a5; --code:#333; } }
+  :root[data-theme="dark"] { --bg:#1f1f1f; --fg:#e8e8e8; --muted:#a5a5a5; --code:#333; }
+  body { background:var(--bg); color:var(--fg); font:15px/1.55 "Segoe UI",system-ui,sans-serif; max-width:760px; margin:0 auto; padding:24px 16px; }
+  code { background:var(--code); padding:1px 4px; border-radius:3px; }
+  h1 { font-size:24px } h2 { font-size:18px; margin-top:28px } .muted { color:var(--muted) }
+</style>
+</head>
+<body>
+<h1>SlideTeX — aide</h1>
+<p class="muted">Équations LaTeX vectorielles et éditables pour PowerPoint 2016+, Microsoft 365 et PowerPoint sur le web.</p>
+<h2>Insérer</h2>
+<p>Accueil › <b>Équation LaTeX</b>. Tapez la formule (sans <code>$</code>), réglez taille et couleur, puis <b>Insérer</b> (ou Ctrl+Entrée).</p>
+<h2>Modifier</h2>
+<p>Cliquez une équation SlideTeX sur la diapo : sa source se charge dans le volet. Modifiez puis <b>Mettre à jour</b> — position, mise à l'échelle et ordre d'empilement sont conservés.</p>
+<h2>Moteurs</h2>
+<ul>
+  <li><b>MathJax intégré</b> : aucune installation, fonctionne hors ligne. Couvre le mode mathématique (AMS, mhchem, physics, cancel, …).</li>
+  <li><b>LaTeX local</b> : vrai LaTeX (TeX Live ou MiKTeX + dvisvgm) via le serveur local <code>npm start</code>. Tous les paquets : TikZ, pgfplots, chemfig, tableaux…</li>
+</ul>
+<h2>Compatibilité</h2>
+<ul>
+  <li>Microsoft 365 / PowerPoint 2021 / 2024 / Web / Mac : insertion SVG + édition.</li>
+  <li>PowerPoint 2016 / 2019 (licence perpétuelle) : insertion PNG (SVG selon version), pas de ré-édition automatique.</li>
+</ul>
+</body>
+</html>
